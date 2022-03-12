@@ -1,0 +1,65 @@
+<!-- head para PC -->
+{% extends "entrada/base_entrada.html" %}
+{% load  static %}
+
+
+{% block title %}
+    {{ entry.title }}
+{% endblock title %}
+
+
+{% block description %}
+    <meta name="description" content="{{ entry.resume }}">
+{% endblock description %}
+
+
+{% block tags %}
+    <meta name="keywords" content="
+    
+    {% for tag in entry.tag.all %}
+        {{ tag.name }} ,
+    {% endfor %}
+        ">
+{% endblock tags %}
+
+
+
+{% block content %}
+
+{% include "includes/header.html" %}
+
+<div class="grid-container">
+    <div class="grid-x grid-margin-x" style="margin-top: 1em;">
+        <h3 class="cell">{{ entry.title }}</h3>
+
+        <!-- bloque de contenido del articulo -->
+        <div class="cell large-8">
+            <div class="cell callout primary">
+                <h5>Resumen:</h5>
+                <p>{{ entry.resume }}</p>
+            </div>
+            <div>
+                <!-- Se agrega el TAG 'Safe' para que el texto se muestre formateado -->
+                <p>{{ entry.content | safe }}</p>
+            </div>
+        </div>
+        <!-- FIN bloque contenido del articulo -->
+
+        <!-- bloque llamada a la accion -->
+        <div class="cell large-4">
+            <div class="card" style="width: 100%;">
+                <img src="{{ entry.image.url }}">
+                <div class="card-section" style="width: 100%;">
+                    <form class="blog-action" action="{% url 'favoritos_app:add-favoritos' entry.id %}" method="POST"> {% csrf_token %}
+                        <button type= "submit" class="button alert" >Agregar a Favoritos</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- FIN bloque llamada a la accion -->
+
+    </div>
+</div>
+{% include "includes/footer.html" %}
+
+{% endblock content %}
